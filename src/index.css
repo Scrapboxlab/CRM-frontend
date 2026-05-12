@@ -11,15 +11,22 @@
     @apply font-sans antialiased;
   }
 
+  /* ── Scrapbox CSS custom properties ── */
   :root {
-    --scrollbar-width: 6px;
+    --brand-blue:   #2A3582;
+    --brand-orange: #EB6700;
+    --brand-navy:   #0F1426;
+    --brand-slate:  #485563;
+    --brand-gray:   #E5E7EB;
+
+    --scrollbar-width: 5px;
     --scrollbar-track: #F1F5F9;
     --scrollbar-thumb: #CBD5E1;
   }
 
   .dark {
-    --scrollbar-track: #1E293B;
-    --scrollbar-thumb: #334155;
+    --scrollbar-track: #141945;
+    --scrollbar-thumb: #2A3582;
   }
 
   ::-webkit-scrollbar {
@@ -33,12 +40,51 @@
 
   ::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
-    border-radius: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-orange);
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Hide scrollbar but keep scroll functionality */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer components {
+  /* Reusable page container */
+  .page-container {
+    @apply p-6 md:p-8 max-w-7xl mx-auto;
+  }
+
+  /* Standard card */
+  .card {
+    @apply bg-white dark:bg-primary-800/60 rounded-2xl border border-slate-100 dark:border-primary-700 shadow-card;
+  }
+
+  /* Accent button */
+  .btn-accent {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent text-white text-sm font-medium
+           hover:bg-accent-600 active:bg-accent-700 transition-colors shadow-sm;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 dark:border-primary-700
+           text-slate-600 dark:text-primary-300 text-sm font-medium
+           hover:border-slate-300 dark:hover:border-primary-600 hover:bg-slate-50 dark:hover:bg-primary-800/80
+           transition-colors;
   }
 }

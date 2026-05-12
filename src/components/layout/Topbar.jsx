@@ -4,20 +4,24 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Bell, Sun, Moon, ChevronDown, LogOut, User, Settings } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useApp } from '../../context/AppContext'
+import { isModuleEnabled, getActiveNavItems } from '../../moduleRegistry'
 
-const breadcrumbMap = {
+const CORE_BREADCRUMBS = {
   '/dashboard': 'Dashboard',
-  '/leads': 'Leads',
-  '/clients': 'Clients',
-  '/pipeline': 'Pipeline',
-  '/tasks': 'Tasks',
-  '/calendar': 'Calendar',
-  '/communications': 'Communications',
-  '/analytics': 'Analytics',
-  '/documents': 'Documents',
-  '/team': 'Team',
-  '/settings': 'Settings',
+  '/leads':     'Leads',
+  '/clients':   'Clients',
+  '/pipeline':  'Pipeline',
+  '/settings':  'Settings',
+  '/modules':   'Modules',
 }
+
+function buildBreadcrumbMap() {
+  const moduleItems = getActiveNavItems()
+  const fromModules = Object.fromEntries(moduleItems.map(i => [i.to, i.label]))
+  return { ...CORE_BREADCRUMBS, ...fromModules }
+}
+
+const breadcrumbMap = buildBreadcrumbMap()
 
 export default function Topbar() {
   const { user, logout } = useAuth()
@@ -77,6 +81,7 @@ export default function Topbar() {
           {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
         </button>
 
+        {isModuleEnabled('notifications') && (
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setNotifOpen(o => !o)}
@@ -84,7 +89,7 @@ export default function Topbar() {
           >
             <Bell size={18} />
             {unreadNotifications > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
             )}
           </button>
 
@@ -124,6 +129,7 @@ export default function Topbar() {
             )}
           </AnimatePresence>
         </div>
+        )}
 
         <div className="relative" ref={profileRef}>
           <button
